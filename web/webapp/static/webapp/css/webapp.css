@@ -1,0 +1,70 @@
+body {
+    background: white;
+}
+
+
+@font-face {
+  font-family: "San Francisco";
+  font-weight: 400;
+  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
+@import url('//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+
+body {
+    font-family: San Francisco, Helvetica, Arial, sans-serif;
+}
+
+.accordion-icon:after {
+    font-family: 'FontAwesome';
+    content: "\f078";
+}
+.sensor-list-header-wrapper.collapsed + .accordion-icon:after {
+    content: "\f054";
+}
+.sensor-list-header-wrapper {
+    cursor: pointer;
+}
+.accordion-group {
+    margin-bottom: 0px;
+}
+.switchery {
+    float: left;
+    margin-right: 10px;
+}
+.slider, .slider-horizontal {
+    width: 100% !important;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.slider .slider-selection {
+	background: #BABABA;
+}
+.sensor-list-header-wrapper {
+    width: 100%;
+}
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+.pic {
+    /*
+    background: url(https://files.catbox.moe/he5ynx.svg);
+    background-size: cover;
+    height: 30vh;
+    width: 100%;
+    */
+}
+
+.icheckbox_flat,
+.iradio_flat {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    background: url(https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/flat/green.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}

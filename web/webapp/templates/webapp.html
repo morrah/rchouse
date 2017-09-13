@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="ru">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width">
+    <title>Домуправа</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootflat/2.0.4/css/bootflat.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" />
+    <link rel="stylesheet" href="http://abpetkov.github.io/switchery/dist/switchery.min.css" />
+    <link rel="stylesheet" href="http://seiyria.com/bootstrap-slider/css/bootstrap-slider.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/flat/green.css" />
+    <link rel="stylesheet" href="/static/webapp/css/webapp.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highstock/4.2.6/highstock.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highstock/4.2.6/modules/exporting.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="http://abpetkov.github.io/switchery/dist/switchery.min.js"></script>
+    <script src="http://seiyria.com/bootstrap-slider/js/bootstrap-slider.js"></script>
+
+    <script src="/static/webapp/js/ws4redis.js"></script>
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        window.ws_uri= "{{ WEBSOCKET_URI }}";
+        window.ws_heartbeat = {{ WS4REDIS_HEARTBEAT }};
+    });
+    </script>
+    <script src="/static/webapp/js/webapp.js"></script>
+</head>
+<body>
+    <div class="menu">
+     <a href="/admin/"><div class="btn btn-success">админка</div></a>
+      <a href="/admin/logout/"><div class="btn btn btn-success pull-right"><span class="fa fa-sign-out"></span></div></a>
+      <div class="highcharts"><div id="container"></div></div>
+      <div class="sensor-list-wrapper">
+        <div class="accordion" id="sensor-list">
+            {% for sensor in sensors %}
+            <div class="accordion-group well sensor" id="sensor_{{ sensor.id }}" data-id="{{ sensor.id }}">
+                <div class="accordion-heading vertical-align h4 form-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="js-switch" />
+                    </div>
+                    <div class="sensor-list-header-wrapper collapsed" data-toggle="collapse" data-parent="#sensor-list" href="#collapse_{{ sensor.id }}">
+                        <span class="sensor-list-header-caption">{{ sensor.name }}</span>
+                        <span class="sensor-list-header-data"></span>
+                    </div>
+                    <i class="accordion-icon"></i>
+                </div>
+                <div id="collapse_{{ sensor.id }}" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <div class="text">Если показание опустилось до:</div>
+                        <div class="slider">
+                            <input type="text" class="slider slider-min" data-slider-min="-40" data-slider-max="40" data-slider-step="1" data-slider-value="5">
+                        </div>
+                        <div class="text">Совершить действия:</div>
+                        <div class="action-list actions-min">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" class="action-heater-on"/>
+                                    <span>Включить обогреватель</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" class="action-heater-off"/>
+                                    <span>Выключить обогреватель</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" class="action-telegram"/>
+                                    <span>Телеграм-уведомление</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text">Если показание поднялось до:</div>
+                        <div class="slider">
+                            <input type="text" class="slider slider-max" data-slider-min="-40" data-slider-max="40" data-slider-step="1" data-slider-value="25">
+                        </div>
+                        <div class="text">Совершить действия:</div>
+                        <div class="action-list actions-max">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" class="action-heater-on"/>
+                                    <span>Включить обогреватель</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" class="action-heater-off"/>
+                                    <span>Выключить обогреватель</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" class="action-telegram"/>
+                                    <span>Телеграм-уведомление</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+
+	<div class="">
+		<div class="row">
+			<div class="col-xs-12 col-md-11 col-lg-10">
+				<pre id="billboard" style="overflow-y: auto; height: 10em; margin-top: 1em;"></pre>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-inline">
+				<div class="form-group col-xs-12 col-sm-7">
+					<input class="form-control" type="text" id="text_message" />
+				</div>
+				<div class="form-group col-xs-12 col-sm-5 col-md-4">
+					<button class="btn btn-primary" id="send_message">Send message</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
